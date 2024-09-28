@@ -1,13 +1,13 @@
 package Vue;
 
-//import Modèle.ClassesMétier.Utilisateur;
-//import  Contrôleur.*;
+import Modèle.ClassesMétier.Utilisateur;
+import  Contrôleur.*;
 import Vue.InterfacesGraphiques.LoginWindow;
-//import Vue.VueLogin;
+import Vue.VueLoginWindow;
 
-public class VueLoginWindowConsole
+public class VueLoginWindowConsole implements VueLoginWindow
 {
-    /*private VueLogin vue;
+    private VueLoginWindow vue;
 
     private LoginWindow loginWindow;
 
@@ -48,5 +48,5 @@ public class VueLoginWindowConsole
             loginWindow.showMessage("Login ou mot de passe incorrect !");
             return null;
         }
-    }*/
+    }
 }

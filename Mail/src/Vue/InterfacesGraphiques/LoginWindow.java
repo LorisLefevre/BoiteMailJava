@@ -1,21 +1,25 @@
 package Vue.InterfacesGraphiques;
 
+import Contrôleur.*;
+import Modèle.ClassesMétier.Utilisateur;
+import Vue.VueLoginWindow;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
-public class LoginWindow extends JFrame
+public class LoginWindow extends JFrame implements VueLoginWindow
 {
     private LoginWindow loginWindow;
 
-    //private MailBoxWindow mailboxwindow;
-    //private MailWindow mailwindow;
+    private MailBoxWindow mailboxwindow;
+    private MailWindow mailwindow;
 
-    //private Contrôleur contrôleur;
+    private Contrôleur contrôleur;
 
-    //public Contrôleur getContrôleur()
-    //{
-    //    return contrôleur;
-    //}
+    public Contrôleur getContrôleur()
+    {
+        return contrôleur;
+    }
 
     private JTextField UsernameField;
     public JTextField getUsernameField()
@@ -49,7 +53,7 @@ public class LoginWindow extends JFrame
         PasswordField = new JPasswordField(20);
         LoginButton = new JButton("Login");
 
-        //LoginButton.setActionCommand(ActionsContrôleur.LOGIN);
+        LoginButton.setActionCommand(ActionsContrôleur.LOGIN);
 
         MainPanel.add(new JLabel("Username:"));
         MainPanel.add(UsernameField);
@@ -81,18 +85,26 @@ public class LoginWindow extends JFrame
         JOptionPane.showMessageDialog(this, message);
     }
 
-    /*@Override
+    @Override
     public void run()
     {
         this.loginWindow = this;
         setVisible(true);
-    }*/
+    }
 
-    /*@Override
+    @Override
+    public void setContrôleur(Contrôleur Contrôleur)
+    {
+        this.loginWindow = this;
+        LoginButton.setActionCommand(ActionsContrôleur.LOGIN);
+        loginWindow.addLoginListener(Contrôleur);
+    }
+
+    @Override
     public Utilisateur Login()
     {
         System.out.println("Connexion de l'utilisateur...");
-        Sting Username = loginWindow.getUsername();
+        String Username = loginWindow.getUsername();
         String Password = loginWindow.getPassword();
         Utilisateur utilisateur = Utilisateur.seConnecter(Username, Password);
 
@@ -100,15 +112,23 @@ public class LoginWindow extends JFrame
         {
             System.out.println("Connexion reussie !");
 
-            if(this.mailbowwindow == null)
+            if(this.mailboxwindow == null)
             {
+
                 System.out.println("Nouvelle fenêtre d'accueil...");
                 this.mailboxwindow = new MailBoxWindow();
+                mailboxwindow.setVisible(true);
             }
 
-            this.mailboxwindow = MailBoxWindow.getMailBoxWindow();
+            if(this.mailwindow == null)
+            {
+                this.mailwindow = new MailWindow();
+                mailboxwindow.setVisible(true);
+            }
+
+            /*this.mailboxwindow = MailBowWindow.getMailBoxWindow();
             mailboxwindow.setContrôleurMailBox(contrôleur);
-            return mailboxwindow;
+            return mailboxwindow;*/
 
         }
 
@@ -118,11 +138,7 @@ public class LoginWindow extends JFrame
         }
 
         return null;
-    }*/
-
-    public static void main(String[] args)
-    {
-        LoginWindow loginWindow = new LoginWindow();
-        loginWindow.setVisible(true);
     }
+
+
 }

@@ -1,10 +1,9 @@
 package Contrôleur;
 
-import Modèle.ClassesMétier.Utilisateur;
+import Modèle.CoucheAccèsDonnées.CoucheAccèsDonnées;
 import Vue.*;
-import EnvoiMail.*;
-import ReceptionMail.*;
 import Vue.InterfacesGraphiques.LoginWindow;
+import Vue.InterfacesGraphiques.MailBoxWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,10 +12,11 @@ import static javax.swing.JColorChooser.showDialog;
 
 public class Contrôleur implements ActionListener
 {
-  /*  private VueLoginWindow vueLoginWindow;
+    private CoucheAccèsDonnées model;
+    private VueLoginWindow vueLoginWindow;
     private LoginWindow loginWindow;
 
-    //private MailBoxWindow mailboxwindow;
+    private MailBoxWindow mailboxwindow;
 
     public Contrôleur(CoucheAccèsDonnées model, VueLoginWindow vue)
     {
@@ -25,21 +25,22 @@ public class Contrôleur implements ActionListener
         this.vueLoginWindow.setContrôleur(this);
     }
 
-    public void ContrôleurMailBox(VueMailBox vueMailBox) {
+    /*public void ContrôleurMailBox(VueMailBox vueMailBox)
+    {
         this.mailboxwindow = (MailBoxWindow) vueMailBox;
-    }
+    }*/
 
     public void run() {
         this.vueLoginWindow.run();
-    }*/
+    }
 
     @Override
     public void actionPerformed(ActionEvent e)
     {
         if (e.getActionCommand().equals(ActionsContrôleur.LOGIN))
         {
-            /*vueLoginWindow.Login();
-            vueMailBox = MailBoxWindows.getMailBoxWindow();
+            vueLoginWindow.Login();
+            /*vueMailBox = MailBowWindow.getMailBoxWindow();
             ContrôleurMailBox(vueMailBox);*/
         }
 

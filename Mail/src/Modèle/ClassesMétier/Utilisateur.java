@@ -4,11 +4,15 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Properties;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
+import javax.mail.*;
 public class Utilisateur extends Personne
 {
-    private String Username;
-    private String Password;
+    private static String Username;
+    private static String Password;
     private static HashMap<String, String> users = new HashMap<>();
 
     public Utilisateur()
@@ -31,23 +35,59 @@ public class Utilisateur extends Personne
         this.Password = Password;
     }
 
-    public static Utilisateur seConnecter(String username, String password)
+
+    public boolean verifieDomaine(String domaine)
     {
-        loadUserData(); // Charger les données des administrateurs depuis le fichier
-        // Vérifier si l'administrateur existe déjà
-        if (users.containsKey(username)) {
+        return Username != null && Username.toLowerCase().contains(domaine.toLowerCase());
+    }
+
+    public  static void DomaineHEPL()
+    {
+
+    }
+
+    public static void DomaineGmail()
+    {
+        MailGmail mailGmail = new MailGmail(Username, Password);
+
+
+        mailGmail.configurerSessionGmail();
+
+
+        Session session = mailGmail.getSession();
+
+        System.out.println("Session Gmail prête à l'emploi pour l'utilisateur : " + Username);
+    }
+    public  static Utilisateur seConnecter(String username, String password)
+    {
+        loadUserData();
+        if (users.containsKey(username))
+        {
             String storedPassword = users.get(username);
-            // Vérifier le mot de passe
+
             if (storedPassword.equals(password))
             {
                 System.out.println("Connexion réussie pour " + username);
-                return new Utilisateur(username, password);
+                Utilisateur utilisateur = new Utilisateur(username, password);
+                if(utilisateur.verifieDomaine("u4.tech.hepl.local"))
+                {
+                   DomaineHEPL();
+                }
+
+                else if(utilisateur.verifieDomaine("gmail.com"))
+                {
+                    DomaineGmail();
+                }
+
+                return utilisateur;
             }
             else
             {
                 System.out.println("Mot de passe incorrect pour " + username);
                 return null;
             }
+
+
         }
         else
         {
@@ -115,7 +155,7 @@ public class Utilisateur extends Personne
         this.Password = Password;
     }
 
-    // Méthode pour afficher les informations du bibliothécaire
+
     @Override
     public void Afficher()
     {
@@ -124,7 +164,7 @@ public class Utilisateur extends Personne
         System.out.println("Password : " + Password);
     }
 
-    // Méthode pour saisir les informations du bibliothécaire
+
     @Override
     public void Saisir()
     {
@@ -147,7 +187,7 @@ public class Utilisateur extends Personne
                 "\nPassword : " + Password;
     }
 
-    // Méthode equals pour comparer deux bibliothécaires
+
     @Override
     public boolean equals(Object o)
     {
@@ -156,45 +196,5 @@ public class Utilisateur extends Personne
         if (!super.equals(o)) return false;
         Utilisateur that = (Utilisateur) o;
         return Username.equals(that.Username) && Password.equals(that.Password);
-    }
-
-    public static void main(String[] args)
-    {
-        String Nom = "";
-        String Prenom = "";
-        String Username = "";
-        String Password = "";
-
-        Utilisateur utilisateur = new Utilisateur(Nom, Prenom, Username, Password);
-
-        utilisateur.Saisir();
-
-        utilisateur.Afficher();
-
-        Utilisateur utilisateur1 = new Utilisateur();
-
-        utilisateur1.Afficher();
-
-        if (utilisateur == utilisateur1)
-        {
-            System.out.println("Ce sont les mêmes utilisateurs");
-        }
-        else {
-            System.out.println("Ce sont des utilisateurs différents");
-        }
-
-        Utilisateur utilisateur2 = new Utilisateur("Toto", "Pierre", "Toto@u4.tech.hepl.local", "TotoWord");
-
-        utilisateur2.Afficher();
-
-        // Nouveaux tests
-        System.out.println("Test de la méthode toString :");
-        System.out.println(utilisateur.toString());
-        System.out.println(utilisateur1.toString());
-            System.out.println(utilisateur2.toString());
-
-        System.out.println("Test de la méthode equals :");
-        System.out.println("utilisateur.equals(utilisateur1) : " + utilisateur.equals(utilisateur1));
-        System.out.println("utilisateur.equals(utilisateur2) : " + utilisateur.equals(utilisateur2));
     }
 }

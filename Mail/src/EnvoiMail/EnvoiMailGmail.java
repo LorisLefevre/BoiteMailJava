@@ -6,10 +6,12 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import javax.mail.*;
 
-public class EnvoiMailGmail {
-    static String Hote = "u4.tech.hepl.local";
+public class EnvoiMailGmail
+{
+    static String Hote = "gmail.com";
 
-    public EnvoiMailGmail() {
+    public EnvoiMailGmail()
+    {
 
     }
 
@@ -26,18 +28,20 @@ public class EnvoiMailGmail {
         {
             protected PasswordAuthentication getPasswordAuthentication()
         {
-            return new PasswordAuthentication("lefevrelo@u4.tech.hepl.local", "azerty1234");
+            return new PasswordAuthentication("lorislfvlefevre@gmail.com", "puqv gfzz qdhb yomp");
         }
         });
         try {
-            String Expediteur = "lefevrelo@u4.tech.hepl.local";
+            String Expediteur = "lorislfvlefevre@gmail.com";
             String Destinataire = "lorislfvlefevre@gmail.com";
+            String Destinataire2 = "lorislefevre02@gmail.com";
             String Sujet = "Test Mail Java";
             String Message = "Bonjour, ceci est un test d'envoi de mail avec Java.";
 
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(Expediteur));
             message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(Destinataire));
+            message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(Destinataire2));
             message.setSubject(Sujet);
             message.setText(Message);
 
