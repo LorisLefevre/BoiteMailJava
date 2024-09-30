@@ -44,6 +44,17 @@ public class MailBoxWindow extends JFrame
 
     private JTable MailTable;
 
+    private static MailBoxWindow instance;
+
+    public static MailBoxWindow getMailBoxWindow()
+    {
+        if (instance == null)
+        {
+            instance = new MailBoxWindow();
+        }
+        return instance;
+    }
+
     public MailBoxWindow()
     {
         super("Boite mail");

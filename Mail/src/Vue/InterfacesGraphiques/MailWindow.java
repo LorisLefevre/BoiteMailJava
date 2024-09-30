@@ -7,15 +7,43 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class MailWindow extends JFrame
+import Modèle.ClassesMétier.*;
+import Modèle.CoucheAccèsDonnées.*;
+import Contrôleur.*;
+import Vue.*;
+
+public class MailWindow extends JFrame implements VueMailWindow
 {
     private JButton Joindre;
     private JButton Envoyer;
     private JTextArea messageArea;
     private JTable attachmentTable;
     private DefaultTableModel tableModel;
+
+    private JTextField expediteurField;
+
+    public JTextField getDestinataireField()
+    {
+        return destinataireField;
+    }
+
+    public void setExpediteur(String expediteur)
+    {
+        expediteurField.setText(expediteur);
+    }
     private JTextField destinataireField;
     private JTextField sujetField;
+
+    private static MailWindow instance;
+
+    public static MailWindow getMailWindow()
+    {
+        if (instance == null)
+        {
+            instance = new MailWindow();
+        }
+        return instance;
+    }
 
     public MailWindow()
     {
@@ -35,7 +63,12 @@ public class MailWindow extends JFrame
 
         // Panel pour "Destinataire" et "Sujet"
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(2, 2, 2, 2));  // 2 lignes, 2 colonnes, espacement de 10px
+        inputPanel.setLayout(new GridLayout(3, 2, 2, 2));  // 2 lignes, 2 colonnes, espacement de 10px
+
+        JLabel expediteurLabel = new JLabel("Expéditeur :");
+        expediteurField = new JTextField();
+        inputPanel.add(expediteurLabel);
+        inputPanel.add(expediteurField);
 
         JLabel destinataireLabel = new JLabel("Destinataire :");
         destinataireField = new JTextField();
@@ -77,29 +110,7 @@ public class MailWindow extends JFrame
 
         this.add(bottomPanel, BorderLayout.SOUTH);
 
-        Joindre.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                // Ouvrir un JFileChooser pour sélectionner un fichier
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-                int result = fileChooser.showOpenDialog(null);  // Affiche le dialogue
-
-                if (result == JFileChooser.APPROVE_OPTION)
-                {
-                    File selectedFile = fileChooser.getSelectedFile();  // Récupère le fichier sélectionné
-                    String filePath = selectedFile.getAbsolutePath();  // Récupère le chemin absolu du fichier
-
-                    // Ajouter le chemin du fichier comme nouvelle ligne dans la JTable
-                    tableModel.addRow(new Object[]{filePath});
-                }
-            }
-        });
-
-        setVisible(true);
     }
 
     // Getter pour récupérer les valeurs
@@ -126,6 +137,60 @@ public class MailWindow extends JFrame
     public String getSujet() {
         return sujetField.getText();
     }
+
+    public void JoindreListener(ActionListener listener)
+    {
+        Joindre.addActionListener(listener);
+    }
+
+    public void EnvoyerListener(ActionListener listener)
+    {
+        Envoyer.addActionListener(listener);
+    }
+
+
+    @Override
+    public void run()
+    {
+        this.setVisible(true);
+    }
+
+    @Override
+    public void setContrôleurMailWindow(Contrôleur contrôleurMailWindow)
+    {
+        Joindre.setActionCommand(ActionsContrôleur.JOINDRE);
+        Envoyer.setActionCommand(ActionsContrôleur.ENVOYER);
+
+        Joindre.addActionListener(contrôleurMailWindow);
+        Envoyer.addActionListener(contrôleurMailWindow);
+    }
+
+    public void Envoyer()
+    {
+        System.out.println("Envoi d'un nouveau mail");
+        String Expediteur = expediteurField.getText();
+
+        System.out.println(Expediteur);
+    }
+
+    public void Joindre()
+    {
+        System.out.println("Joindre une pièce jointe au mail");
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int result = fileChooser.showOpenDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            tableModel.addRow(new Object[]{filePath});
+        }
+    }
+
 
 
 }

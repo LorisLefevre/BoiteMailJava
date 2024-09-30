@@ -112,19 +112,23 @@ public class LoginWindow extends JFrame implements VueLoginWindow
         {
             System.out.println("Connexion reussie !");
 
-            if(this.mailboxwindow == null)
+            /*if(this.mailboxwindow == null)
             {
 
                 System.out.println("Nouvelle fenêtre d'accueil...");
                 this.mailboxwindow = new MailBoxWindow();
                 mailboxwindow.setVisible(true);
-            }
+            }*/
 
             if(this.mailwindow == null)
             {
                 this.mailwindow = new MailWindow();
-                mailboxwindow.setVisible(true);
             }
+            this.mailwindow = mailwindow.getMailWindow();
+            mailwindow.setExpediteur(Username);
+            mailwindow.setVisible(true);
+            mailwindow.setContrôleurMailWindow(contrôleur);
+            return utilisateur;
 
             /*this.mailboxwindow = MailBowWindow.getMailBoxWindow();
             mailboxwindow.setContrôleurMailBox(contrôleur);
