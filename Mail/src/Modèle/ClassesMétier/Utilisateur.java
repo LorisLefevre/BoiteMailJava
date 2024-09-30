@@ -41,21 +41,19 @@ public class Utilisateur extends Personne
         return Username != null && Username.toLowerCase().contains(domaine.toLowerCase());
     }
 
-    public  static void DomaineHEPL()
+    public  static void DomaineMail(String Hote)
     {
-
+        Mail mail = new Mail(Username, Password);
+        mail.ConfiguerSessionMail(Hote);
+        Session session = mail.getSession();
+        System.out.println("Session mail prête à l'emploi pour l'utilisateur : " + Username);
     }
 
     public static void DomaineGmail()
     {
         MailGmail mailGmail = new MailGmail(Username, Password);
-
-
         mailGmail.configurerSessionGmail();
-
-
         Session session = mailGmail.getSession();
-
         System.out.println("Session Gmail prête à l'emploi pour l'utilisateur : " + Username);
     }
     public  static Utilisateur seConnecter(String username, String password)
@@ -64,14 +62,32 @@ public class Utilisateur extends Personne
         if (users.containsKey(username))
         {
             String storedPassword = users.get(username);
+            String Hote;
 
             if (storedPassword.equals(password))
             {
                 System.out.println("Connexion réussie pour " + username);
                 Utilisateur utilisateur = new Utilisateur(username, password);
-                if(utilisateur.verifieDomaine("u4.tech.hepl.local"))
+                if(utilisateur.verifieDomaine("u4.tech.hepl.local") || utilisateur.verifieDomaine("student.hepl.be") || utilisateur.verifieDomaine("outlook.be"))
                 {
-                   DomaineHEPL();
+                   if(utilisateur.verifieDomaine("u4.tech.hepl.local"))
+                   {
+                       Hote = "u4.tech.hepl.local";
+                       DomaineMail(Hote);
+                   }
+
+                   else if (utilisateur.verifieDomaine("student.hepl.be"))
+                   {
+                       Hote = "student.hepl.be";
+                       DomaineMail(Hote);
+                   }
+
+                   else if (utilisateur.verifieDomaine("outlook.be"))
+                   {
+                       Hote = "outlook.be";
+                       DomaineMail(Hote);
+                   }
+
                 }
 
                 else if(utilisateur.verifieDomaine("gmail.com"))

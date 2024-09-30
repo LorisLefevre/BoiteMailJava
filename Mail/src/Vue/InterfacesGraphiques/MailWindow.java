@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import Modèle.ClassesMétier.*;
 import Modèle.CoucheAccèsDonnées.*;
@@ -14,9 +16,16 @@ import Vue.*;
 
 public class MailWindow extends JFrame implements VueMailWindow
 {
+
+    private CoucheAccèsDonnées coucheAccèsDonnées;
+
     private JButton Joindre;
     private JButton Envoyer;
     private JTextArea messageArea;
+   public void setMessageArea(String messageArea)
+    {
+        this.messageArea.setText(messageArea);
+    }
     private JTable attachmentTable;
     private DefaultTableModel tableModel;
 
@@ -32,7 +41,17 @@ public class MailWindow extends JFrame implements VueMailWindow
         expediteurField.setText(expediteur);
     }
     private JTextField destinataireField;
+
+    public void setDestinataire(String destinataire)
+    {
+        destinataireField.setText(destinataire);
+    }
     private JTextField sujetField;
+
+    public void setSujet(String sujet)
+    {
+        sujetField.setText(sujet);
+    }
 
     private static MailWindow instance;
 
@@ -47,7 +66,7 @@ public class MailWindow extends JFrame implements VueMailWindow
 
     public MailWindow()
     {
-        super("Fenêtre de Pièces Jointes");
+        super("Fenêtre d'envoi de mail");
         this.setSize(600, 500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -91,9 +110,9 @@ public class MailWindow extends JFrame implements VueMailWindow
 
         // Zone de texte pour le message
         messageArea = new JTextArea();
-        messageArea.setLineWrap(true);  // Active le retour à la ligne automatique
-        messageArea.setWrapStyleWord(true);  // Retour à la ligne sur des mots complets
-        messageArea.setFont(new Font("Arial", Font.PLAIN, 16)); // Texte lisible
+        messageArea.setLineWrap(true);
+        messageArea.setWrapStyleWord(true);
+        messageArea.setFont(new Font("Arial", Font.PLAIN, 16));
         JScrollPane messageScrollPane = new JScrollPane(messageArea);
         this.add(messageScrollPane, BorderLayout.CENTER);
 
@@ -109,6 +128,8 @@ public class MailWindow extends JFrame implements VueMailWindow
         bottomPanel.add(scrollPane, BorderLayout.CENTER);
 
         this.add(bottomPanel, BorderLayout.SOUTH);
+
+        coucheAccèsDonnées = new CoucheAccèsDonnéesDAO();
 
 
     }
@@ -148,6 +169,11 @@ public class MailWindow extends JFrame implements VueMailWindow
         Envoyer.addActionListener(listener);
     }
 
+    public void showMessage(String message)
+    {
+        JOptionPane.showMessageDialog(this, message);
+    }
+
 
     @Override
     public void run()
@@ -169,8 +195,85 @@ public class MailWindow extends JFrame implements VueMailWindow
     {
         System.out.println("Envoi d'un nouveau mail");
         String Expediteur = expediteurField.getText();
+        String Destinataire = destinataireField.getText();
+        String Sujet = sujetField.getText();
+        String Message = messageArea.getText();
 
         System.out.println(Expediteur);
+        System.out.println(Destinataire);
+        System.out.println(Sujet);
+        System.out.println(Message);
+
+        List<String> PiecesJointes = new ArrayList<>();
+
+        try
+        {
+            int Compteur = attachmentTable.getRowCount();
+            String Domaine;
+            if(Expediteur.contains("gmail.com"))
+            {
+                if(Compteur == 0)
+                {
+                    coucheAccèsDonnées.EnvoyerMailGmail(Expediteur, Destinataire, Sujet, Message);
+                }
+
+                else if(Compteur > 0)
+                {
+
+                    for(int i = 0; i != Compteur; i++)
+                    {
+                        String path = attachmentTable.getValueAt(i, 0).toString();
+                        PiecesJointes.add(path);
+
+                        System.out.println(path);
+                    }
+
+                    coucheAccèsDonnées.EnvoyerMailGmailPieceJointe(Expediteur, Destinataire, Sujet, Message, PiecesJointes);
+                }
+
+            }
+
+            else if(Expediteur.contains("u4.tech.hepl.local"))
+            {
+                Domaine = "smtp.u4.tech.hepl.local";
+                if(Compteur == 0)
+                {
+                    coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
+                }
+            }
+
+            else if(Expediteur.contains("student.hepl.be"))
+            {
+                Domaine = "smtp.student.hepl.be";
+                if(Compteur == 0)
+                {
+                    coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
+                }
+            }
+
+            else if(Expediteur.contains("outlook.be"))
+            {
+                Domaine = "smtp.outlook.be";
+                if(Compteur == 0)
+                {
+                    coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
+                }
+            }
+
+        }
+
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        destinataireField.setText("");
+        sujetField.setText("");
+        messageArea.setText("");
+        PiecesJointes.clear();
+        PiecesJointes = null;
+        DefaultTableModel model = (DefaultTableModel) attachmentTable.getModel();
+        model.setRowCount(0);
     }
 
     public void Joindre()
@@ -190,7 +293,4 @@ public class MailWindow extends JFrame implements VueMailWindow
             tableModel.addRow(new Object[]{filePath});
         }
     }
-
-
-
 }
