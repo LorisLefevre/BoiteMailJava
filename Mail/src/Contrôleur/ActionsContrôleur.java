@@ -16,4 +16,6 @@ public class ActionsContrôleur
 
     public static final String OUVRIR = "ouvrir";
 
+    public static final String ANNULER = "annuler";
+
 }

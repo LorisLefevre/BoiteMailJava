@@ -18,7 +18,7 @@ public class Contrôleur implements ActionListener
     private LoginWindow loginWindow;
 
     private MailBoxWindow mailboxwindow;
-    //private VueMailBoxWindow vueMailBoxWindow;
+    private VueMailBoxWindow vueMailBoxWindow;
 
     private MailWindow mailwindow;
     private VueMailWindow vueMailWindow;
@@ -30,10 +30,11 @@ public class Contrôleur implements ActionListener
         this.vueLoginWindow.setContrôleur(this);
     }
 
-    /*public void ContrôleurMailBox(VueMailBox vueMailBox)
+    public void ContrôleurMailBox(VueMailBoxWindow vueMailBox)
     {
         this.mailboxwindow = (MailBoxWindow) vueMailBox;
-    }*/
+        vueMailBox.setContrôleurMailBoxWindow(this);
+    }
 
     public void ContrôleurMailWindow(VueMailWindow vueMailWindow)
     {
@@ -54,15 +55,14 @@ public class Contrôleur implements ActionListener
             vueLoginWindow.Login();
             vueMailWindow = MailWindow.getMailWindow();
             ContrôleurMailWindow(vueMailWindow);
-
-            /*vueMailBox = MailBowWindow.getMailBoxWindow();
-            ContrôleurMailBox(vueMailBox);*/
+            vueMailBoxWindow = MailBoxWindow.getMailBoxWindow();
+            ContrôleurMailBox(vueMailBoxWindow);
         }
 
         if (e.getActionCommand().equals(ActionsContrôleur.CREER))
         {
             System.out.println("Création d'un nouveau mail");
-
+            mailboxwindow.Creer();
         }
 
         if (e.getActionCommand().equals(ActionsContrôleur.ENVOYER))
@@ -90,6 +90,13 @@ public class Contrôleur implements ActionListener
         if (e.getActionCommand().equals(ActionsContrôleur.OUVRIR))
         {
             System.out.println("Ouvrir le mail");
+        }
+
+        if (e.getActionCommand().equals(ActionsContrôleur.ANNULER))
+        {
+            System.out.println("Annuler la création de mail");
+            mailwindow.Annuler();
+
         }
     }
 

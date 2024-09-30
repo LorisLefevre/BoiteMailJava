@@ -12,5 +12,5 @@ public interface CoucheAccèsDonnées
 
     void EnvoyerMail(String Hote, String Expediteur, String Destinataire, String Sujet, String Message);
 
-    void EnvoyerMailPieceJointe(String Expediteur, String Destinataire, String Sujet, String Message, List<String> PieceJointe);
+    void EnvoyerMailPieceJointe(String Hote,String Expediteur, String Destinataire, String Sujet, String Message, List<String> PieceJointe);
 }

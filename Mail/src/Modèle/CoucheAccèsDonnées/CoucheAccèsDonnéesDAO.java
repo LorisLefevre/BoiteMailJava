@@ -143,9 +143,46 @@ public class CoucheAccèsDonnéesDAO implements CoucheAccèsDonnées
         }
     }
     @Override
-    public void EnvoyerMailPieceJointe(String Expediteur, String Destinataire, String Sujet, String Message, List<String> PieceJointe)
+    public void EnvoyerMailPieceJointe(String Hote, String Expediteur, String Destinataire, String Sujet, String Message, List<String> PiecesJointes)
     {
+        Properties props = System.getProperties();
+        props.put("mail.smtp.host", Hote);
+        Session session = Session.getDefaultInstance(props, null);
 
+        try
+        {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(Expediteur));
+            message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(Destinataire));
+            message.setSubject(Sujet);
+
+            Multipart multipart = new MimeMultipart();
+
+            MimeBodyPart bodyPart = new MimeBodyPart();
+            bodyPart.setText(Message);
+            multipart.addBodyPart(bodyPart);
+
+            for(String PieceJointe : PiecesJointes)
+            {
+                MimeBodyPart attachmentPart = new MimeBodyPart();
+                attachmentPart.setDataHandler(new DataHandler(new FileDataSource(PieceJointe)));
+                attachmentPart.setFileName(PieceJointe);
+                multipart.addBodyPart(attachmentPart);
+            }
+
+            message.setContent(multipart);
+
+            System.out.println("Envoi du mail...");
+
+            javax.mail.Transport.send(message);
+
+            System.out.println("Envoi reussi !");
+        }
+
+        catch (Exception e)
+        {
+            System.out.println("Erreur lors de l'envoi du mail : " + e);
+        }
     }
 }
 

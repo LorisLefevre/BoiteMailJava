@@ -20,33 +20,72 @@ public class MailWindow extends JFrame implements VueMailWindow
     private CoucheAccèsDonnées coucheAccèsDonnées;
 
     private JButton Joindre;
+    public JButton getJoindreButton()
+    {
+        return Joindre;
+    }
     private JButton Envoyer;
+    public JButton getEnvoyerButton()
+    {
+        return Envoyer;
+    }
+
+    private JButton Annuler;
+    public JButton getAnnulerButton()
+    {
+        return Annuler;
+    }
+
     private JTextArea messageArea;
+    public JTextArea getMessageArea()
+    {
+        return messageArea;
+    }
    public void setMessageArea(String messageArea)
     {
         this.messageArea.setText(messageArea);
     }
     private JTable attachmentTable;
     private DefaultTableModel tableModel;
+    public DefaultTableModel getTableModel()
+    {
+        return tableModel;
+    }
 
     private JTextField expediteurField;
 
-    public JTextField getDestinataireField()
+    public JTextField getExpediteurField()
     {
-        return destinataireField;
+        return expediteurField;
     }
 
     public void setExpediteur(String expediteur)
     {
         expediteurField.setText(expediteur);
     }
+
+    public JTextField getDestinataireField()
+    {
+        return destinataireField;
+    }
+
+
     private JTextField destinataireField;
 
+    public String getDestinataire()
+    {
+        return destinataireField.getText();
+    }
     public void setDestinataire(String destinataire)
     {
         destinataireField.setText(destinataire);
     }
     private JTextField sujetField;
+
+    public String getSujet()
+    {
+        return sujetField.getText();
+    }
 
     public void setSujet(String sujet)
     {
@@ -76,8 +115,10 @@ public class MailWindow extends JFrame implements VueMailWindow
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         Joindre = new JButton("Joindre");
         Envoyer = new JButton("Envoyer");
+        Annuler = new JButton("Annuler");
         buttonPanel.add(Joindre);
         buttonPanel.add(Envoyer);
+        buttonPanel.add(Annuler);
         this.add(buttonPanel, BorderLayout.NORTH);
 
         // Panel pour "Destinataire" et "Sujet"
@@ -130,35 +171,7 @@ public class MailWindow extends JFrame implements VueMailWindow
         this.add(bottomPanel, BorderLayout.SOUTH);
 
         coucheAccèsDonnées = new CoucheAccèsDonnéesDAO();
-
-
     }
-
-    // Getter pour récupérer les valeurs
-    public JButton getJoindreButton() {
-        return Joindre;
-    }
-
-    public JButton getEnvoyerButton() {
-        return Envoyer;
-    }
-
-    public JTextArea getMessageArea() {
-        return messageArea;
-    }
-
-    public DefaultTableModel getTableModel() {
-        return tableModel;
-    }
-
-    public String getDestinataire() {
-        return destinataireField.getText();
-    }
-
-    public String getSujet() {
-        return sujetField.getText();
-    }
-
     public void JoindreListener(ActionListener listener)
     {
         Joindre.addActionListener(listener);
@@ -167,6 +180,10 @@ public class MailWindow extends JFrame implements VueMailWindow
     public void EnvoyerListener(ActionListener listener)
     {
         Envoyer.addActionListener(listener);
+    }
+    public void AnnulerListener(ActionListener listener)
+    {
+        Annuler.addActionListener(listener);
     }
 
     public void showMessage(String message)
@@ -186,9 +203,11 @@ public class MailWindow extends JFrame implements VueMailWindow
     {
         Joindre.setActionCommand(ActionsContrôleur.JOINDRE);
         Envoyer.setActionCommand(ActionsContrôleur.ENVOYER);
+        Annuler.setActionCommand(ActionsContrôleur.ANNULER);
 
         Joindre.addActionListener(contrôleurMailWindow);
         Envoyer.addActionListener(contrôleurMailWindow);
+        Annuler.addActionListener(contrôleurMailWindow);
     }
 
     public void Envoyer()
@@ -235,35 +254,81 @@ public class MailWindow extends JFrame implements VueMailWindow
 
             else if(Expediteur.contains("u4.tech.hepl.local"))
             {
-                Domaine = "smtp.u4.tech.hepl.local";
+                Domaine = "u4.tech.hepl.local";
                 if(Compteur == 0)
                 {
                     coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
+                }
+
+                else if(Compteur > 0)
+                {
+
+                    for(int i = 0; i != Compteur; i++)
+                    {
+                        String path = attachmentTable.getValueAt(i, 0).toString();
+                        PiecesJointes.add(path);
+
+                        System.out.println(path);
+                    }
+
+                    coucheAccèsDonnées.EnvoyerMailPieceJointe(Domaine, Expediteur, Destinataire, Sujet, Message, PiecesJointes);
                 }
             }
 
             else if(Expediteur.contains("student.hepl.be"))
             {
-                Domaine = "smtp.student.hepl.be";
+                Domaine = "student.hepl.be";
                 if(Compteur == 0)
                 {
                     coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
+                }
+
+                else if(Compteur > 0)
+                {
+
+                    for(int i = 0; i != Compteur; i++)
+                    {
+                        String path = attachmentTable.getValueAt(i, 0).toString();
+                        PiecesJointes.add(path);
+
+                        System.out.println(path);
+                    }
+
+                    coucheAccèsDonnées.EnvoyerMailPieceJointe(Domaine, Expediteur, Destinataire, Sujet, Message, PiecesJointes);
                 }
             }
 
             else if(Expediteur.contains("outlook.be"))
             {
-                Domaine = "smtp.outlook.be";
+                Domaine = "outlook.be";
                 if(Compteur == 0)
                 {
                     coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
                 }
+
+                else if(Compteur > 0)
+                {
+
+                    for(int i = 0; i != Compteur; i++)
+                    {
+                        String path = attachmentTable.getValueAt(i, 0).toString();
+                        PiecesJointes.add(path);
+
+                        System.out.println(path);
+                    }
+
+                    coucheAccèsDonnées.EnvoyerMailPieceJointe(Domaine, Expediteur, Destinataire, Sujet, Message, PiecesJointes);
+                }
             }
+
+            showMessage("Message envoyé avec succès");
+
 
         }
 
         catch (Exception e)
         {
+            showMessage("Erreur lors de l'envoi du message " + e);
             e.printStackTrace();
         }
 
@@ -271,9 +336,9 @@ public class MailWindow extends JFrame implements VueMailWindow
         sujetField.setText("");
         messageArea.setText("");
         PiecesJointes.clear();
-        PiecesJointes = null;
         DefaultTableModel model = (DefaultTableModel) attachmentTable.getModel();
         model.setRowCount(0);
+        this.setVisible(false);
     }
 
     public void Joindre()
@@ -292,5 +357,15 @@ public class MailWindow extends JFrame implements VueMailWindow
 
             tableModel.addRow(new Object[]{filePath});
         }
+    }
+
+    public void Annuler()
+    {
+        destinataireField.setText("");
+        sujetField.setText("");
+        messageArea.setText("");
+        DefaultTableModel model = (DefaultTableModel) attachmentTable.getModel();
+        model.setRowCount(0);
+        this.setVisible(false);
     }
 }

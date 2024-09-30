@@ -6,13 +6,20 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 import Contrôleur.ActionsContrôleur;
+import Contrôleur.Contrôleur;
+import Vue.VueMailBoxWindow;
 
-public class MailBoxWindow extends JFrame
+public class MailBoxWindow extends JFrame implements VueMailBoxWindow
 {
-    private JLabel User;
-    public JLabel getUser()
+    private JTextField UserField;
+    public JTextField getUser()
     {
-        return User;
+        return UserField;
+    }
+
+    public void setUser(String User)
+    {
+        UserField.setText(User);
     }
 
     private JButton Creer;
@@ -55,6 +62,9 @@ public class MailBoxWindow extends JFrame
         return instance;
     }
 
+    private MailWindow mailWindow;
+
+    private Contrôleur contrôleur;
     public MailBoxWindow()
     {
         super("Boite mail");
@@ -64,7 +74,7 @@ public class MailBoxWindow extends JFrame
 
         TopPanel = new JPanel();
         TopPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        User = new JLabel("Utilisateur");
+        UserField = new JTextField("Utilisateur");
         Creer = new JButton("Créer");
         Raffraichir = new JButton("Raffraichir");
         Lire = new JButton("Lire");
@@ -75,7 +85,7 @@ public class MailBoxWindow extends JFrame
         Lire.setActionCommand(ActionsContrôleur.LIRE);
         Ouvrir.setActionCommand(ActionsContrôleur.OUVRIR);
 
-        TopPanel.add(User);
+        TopPanel.add(UserField);
         TopPanel.add(Creer);
         TopPanel.add(Raffraichir);
         TopPanel.add(Lire);
@@ -84,15 +94,9 @@ public class MailBoxWindow extends JFrame
         this.add(TopPanel, BorderLayout.NORTH);
 
         String[] columnNames = {"Expéditeur", "Destinataire", "Date d'envoi", "Sujet", "Pièces Jointes"};
-
-        // Modèle de la JTable
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         MailTable = new JTable(tableModel);
-
-        // Activer le redimensionnement automatique des colonnes
         MailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-        // Mettre la JTable dans un JScrollPane pour avoir une barre de défilement si nécessaire
         ScrollPane = new JScrollPane(MailTable);
         this.add(ScrollPane, BorderLayout.CENTER);
     }
@@ -122,9 +126,31 @@ public class MailBoxWindow extends JFrame
         JOptionPane.showMessageDialog(this, message);
     }
 
-    public static void main(String[] args)
+    @Override
+    public void run()
     {
-        MailBoxWindow mailBoxWindow = new MailBoxWindow();
-        mailBoxWindow.setVisible(true);
+        this.setVisible(true);
+    }
+
+    @Override
+    public void setContrôleurMailBoxWindow(Contrôleur contrôleurMailBoxWindow)
+    {
+        Creer.setActionCommand(ActionsContrôleur.CREER);
+        Raffraichir.setActionCommand(ActionsContrôleur.RAFFRAICHIR);
+        Ouvrir.setActionCommand(ActionsContrôleur.OUVRIR);
+        Lire.setActionCommand(ActionsContrôleur.LIRE);
+
+        Creer.addActionListener(contrôleurMailBoxWindow);
+        Raffraichir.addActionListener(contrôleurMailBoxWindow);
+        Ouvrir.addActionListener(contrôleurMailBoxWindow);
+        Lire.addActionListener(contrôleurMailBoxWindow);
+    }
+
+    public void Creer()
+    {
+        mailWindow = mailWindow.getMailWindow();
+        mailWindow.setExpediteur(UserField.getText());
+        mailWindow.setContrôleurMailWindow(contrôleur);
+        mailWindow.setVisible(true);
     }
 }
