@@ -42,6 +42,17 @@ public class LoginWindow extends JFrame implements VueLoginWindow
 
     private JPanel MainPanel;
 
+    private static LoginWindow instance;
+
+    public static LoginWindow getLoginWindow()
+    {
+        if (instance == null)
+        {
+            instance = new LoginWindow();
+        }
+        return instance;
+    }
+
     public LoginWindow()
     {
         super("Login...");
@@ -120,6 +131,7 @@ public class LoginWindow extends JFrame implements VueLoginWindow
             }
             this.mailboxwindow = MailBoxWindow.getMailBoxWindow();
             mailboxwindow.setUser(Username);
+            mailboxwindow.getUser().setEditable(false);
             mailboxwindow.setVisible(true);
             mailboxwindow.setContrôleurMailBoxWindow(contrôleur);
             return utilisateur;

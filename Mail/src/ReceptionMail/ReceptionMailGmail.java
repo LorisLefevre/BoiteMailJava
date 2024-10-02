@@ -1,42 +1,53 @@
 package ReceptionMail;
 
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 import javax.mail.*;
-public class ReceptionMail
-{
-    static String Hote = "u4.tech.hepl.local";
-    static String charset = "iso8859-1";
-    public ReceptionMail()
-    {
+import java.util.Properties;
 
+public class ReceptionMailGmail
+{
+    static String charset = "iso8859-1";
+    static String Hote = "pop.gmail.com";  // Serveur POP3 de Gmail
+
+    public ReceptionMailGmail()
+    {
     }
 
     public static void main(String[] args)
     {
-        Properties props = System.getProperties();
+        Properties props = new Properties();
         System.out.println("Création d'une session mail");
+
+
         props.put("mail.pop3.host", Hote);
-        props.put("mail.disable.top", "true");
+        props.put("mail.pop3.port", "995");
+        props.put("mail.pop3.ssl.enable", "true");
+        props.put("mail.pop3.ssl.trust", "pop.gmail.com");
         props.put("file.encoding", charset);
-        Session session = Session.getDefaultInstance(props, null);
+
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator()
+        {
+            protected PasswordAuthentication getPasswordAuthentication()
+            {
+                return new PasswordAuthentication("lorislfvlefevre@gmail.com", "puqv gfzz qdhb yomp");
+            }
+        });
+
         try
         {
-            String user = "lefevrelo";
-            String password = "azerty1234";
-            Store store = session.getStore("pop3");
-            store.connect(Hote, user, password);
+            Store store = session.getStore("pop3s");
+            store.connect(Hote, "lorislfvlefevre@gmail.com", "puqv gfzz qdhb yomp");
+
             Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_ONLY);
-            Message messages []= folder.getMessages();
+
+            Message[] messages = folder.getMessages();
             System.out.println("Nombre de messages : " + folder.getMessageCount());
             System.out.println("Nombre de nouveaux messages : " + folder.getNewMessageCount());
 
             for (Message message : messages)
             {
                 System.out.println("Message n° " + message.getMessageNumber());
+                System.out.println("Expéditeur : " + message.getFrom()[0].toString());
                 System.out.println("Sujet : " + message.getSubject());
                 System.out.println("Date : " + message.getSentDate());
                 System.out.println("-----------------------------------");

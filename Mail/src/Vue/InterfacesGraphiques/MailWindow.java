@@ -36,6 +36,12 @@ public class MailWindow extends JFrame implements VueMailWindow
         return Annuler;
     }
 
+    private JButton Fermer;
+    public JButton getFermerButton()
+    {
+        return Fermer;
+    }
+
     private JTextArea messageArea;
     public JTextArea getMessageArea()
     {
@@ -87,6 +93,11 @@ public class MailWindow extends JFrame implements VueMailWindow
         return sujetField.getText();
     }
 
+    public JTextField getSujetField()
+    {
+        return sujetField;
+    }
+
     public void setSujet(String sujet)
     {
         sujetField.setText(sujet);
@@ -116,9 +127,11 @@ public class MailWindow extends JFrame implements VueMailWindow
         Joindre = new JButton("Joindre");
         Envoyer = new JButton("Envoyer");
         Annuler = new JButton("Annuler");
+        Fermer = new JButton("Fermer");
         buttonPanel.add(Joindre);
         buttonPanel.add(Envoyer);
         buttonPanel.add(Annuler);
+        buttonPanel.add(Fermer);
         this.add(buttonPanel, BorderLayout.NORTH);
 
         // Panel pour "Destinataire" et "Sujet"
@@ -129,6 +142,7 @@ public class MailWindow extends JFrame implements VueMailWindow
         expediteurField = new JTextField();
         inputPanel.add(expediteurLabel);
         inputPanel.add(expediteurField);
+        getExpediteurField().setEditable(false);
 
         JLabel destinataireLabel = new JLabel("Destinataire :");
         destinataireField = new JTextField();
@@ -186,6 +200,11 @@ public class MailWindow extends JFrame implements VueMailWindow
         Annuler.addActionListener(listener);
     }
 
+    public void FermerListener(ActionListener listener)
+    {
+        Fermer.addActionListener(listener);
+    }
+
     public void showMessage(String message)
     {
         JOptionPane.showMessageDialog(this, message);
@@ -204,10 +223,12 @@ public class MailWindow extends JFrame implements VueMailWindow
         Joindre.setActionCommand(ActionsContrôleur.JOINDRE);
         Envoyer.setActionCommand(ActionsContrôleur.ENVOYER);
         Annuler.setActionCommand(ActionsContrôleur.ANNULER);
+        Fermer.setActionCommand(ActionsContrôleur.FERMER);
 
         Joindre.addActionListener(contrôleurMailWindow);
         Envoyer.addActionListener(contrôleurMailWindow);
         Annuler.addActionListener(contrôleurMailWindow);
+        Fermer.addActionListener(contrôleurMailWindow);
     }
 
     public void Envoyer()
@@ -298,9 +319,9 @@ public class MailWindow extends JFrame implements VueMailWindow
                 }
             }
 
-            else if(Expediteur.contains("outlook.be"))
+            else if(Expediteur.contains("outlook"))
             {
-                Domaine = "outlook.be";
+                Domaine = "outlook";
                 if(Compteur == 0)
                 {
                     coucheAccèsDonnées.EnvoyerMail(Domaine, Expediteur, Destinataire, Sujet, Message);
@@ -355,11 +376,22 @@ public class MailWindow extends JFrame implements VueMailWindow
             File selectedFile = fileChooser.getSelectedFile();
             String filePath = selectedFile.getAbsolutePath();
 
+
             tableModel.addRow(new Object[]{filePath});
         }
     }
 
     public void Annuler()
+    {
+        destinataireField.setText("");
+        sujetField.setText("");
+        messageArea.setText("");
+        DefaultTableModel model = (DefaultTableModel) attachmentTable.getModel();
+        model.setRowCount(0);
+        this.setVisible(false);
+    }
+
+    public void Fermer()
     {
         destinataireField.setText("");
         sujetField.setText("");

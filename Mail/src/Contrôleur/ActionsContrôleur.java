@@ -18,4 +18,6 @@ public class ActionsContrôleur
 
     public static final String ANNULER = "annuler";
 
+    public static final String FERMER = "fermer";
+
 }

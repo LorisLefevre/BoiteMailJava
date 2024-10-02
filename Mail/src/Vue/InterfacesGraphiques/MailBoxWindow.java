@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import Contrôleur.ActionsContrôleur;
 import Contrôleur.Contrôleur;
+import Modèle.ClassesMétier.Utilisateur;
 import Vue.VueMailBoxWindow;
 
 public class MailBoxWindow extends JFrame implements VueMailBoxWindow
@@ -65,6 +66,8 @@ public class MailBoxWindow extends JFrame implements VueMailBoxWindow
     private MailWindow mailWindow;
 
     private Contrôleur contrôleur;
+
+    private LoginWindow loginWindow;
     public MailBoxWindow()
     {
         super("Boite mail");
@@ -99,6 +102,8 @@ public class MailBoxWindow extends JFrame implements VueMailBoxWindow
         MailTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         ScrollPane = new JScrollPane(MailTable);
         this.add(ScrollPane, BorderLayout.CENTER);
+
+        RecupererBoiteMail();
     }
 
     public void addCreerListener(ActionListener listener)
@@ -150,7 +155,38 @@ public class MailBoxWindow extends JFrame implements VueMailBoxWindow
     {
         mailWindow = mailWindow.getMailWindow();
         mailWindow.setExpediteur(UserField.getText());
+        mailWindow.getExpediteurField().setEditable(false);
+        mailWindow.getDestinataireField().setEditable(true);
+        mailWindow.getSujetField().setEditable(true);
+        mailWindow.getMessageArea().setEditable(true);
+        mailWindow.getJoindreButton().setVisible(true);
+        mailWindow.getEnvoyerButton().setVisible(true);
+        mailWindow.getAnnulerButton().setVisible(true);
+        mailWindow.getFermerButton().setVisible(false);
         mailWindow.setContrôleurMailWindow(contrôleur);
         mailWindow.setVisible(true);
+    }
+
+    public void Lire()
+    {
+        mailWindow = MailWindow.getMailWindow();
+        mailWindow.getJoindreButton().setVisible(false);
+        mailWindow.getEnvoyerButton().setVisible(false);
+        mailWindow.getAnnulerButton().setVisible(false);
+        mailWindow.getFermerButton().setVisible(true);
+        mailWindow.setContrôleurMailWindow(contrôleur);
+        mailWindow.setExpediteur("ABC@domaine.com");
+        mailWindow.getExpediteurField().setEditable(false);
+        mailWindow.setDestinataire(UserField.getText());
+        mailWindow.getDestinataireField().setEditable(false);
+        mailWindow.setSujet("Sujet du mail");
+        mailWindow.getSujetField().setEditable(false);
+        mailWindow.setMessageArea("Bonjour, ceci est un test de lecture de mail en dur");
+        mailWindow.getMessageArea().setEditable(false);
+        mailWindow.setVisible(true);
+    }
+    public void RecupererBoiteMail()
+    {
+
     }
 }
