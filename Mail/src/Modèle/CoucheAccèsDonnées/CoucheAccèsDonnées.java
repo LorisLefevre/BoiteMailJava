@@ -1,7 +1,7 @@
 package Modèle.CoucheAccèsDonnées;
 
-import Modèle.ClassesMétier.*;
 
+import javax.mail.Message;
 import java.util.List;
 
 public interface CoucheAccèsDonnées
@@ -13,4 +13,6 @@ public interface CoucheAccèsDonnées
     void EnvoyerMail(String Hote, String Expediteur, String Destinataire, String Sujet, String Message);
 
     void EnvoyerMailPieceJointe(String Hote,String Expediteur, String Destinataire, String Sujet, String Message, List<String> PieceJointe);
+
+    Message[] RecevoirMailGmail(String User, String Destinataire);
 }

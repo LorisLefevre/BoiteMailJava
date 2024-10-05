@@ -38,7 +38,8 @@ public class EnvoiMailPieceAttacheeGmail
             }
         });
 
-        try {
+        try
+        {
             String Expediteur = "lorislfvlefevre@gmail.com";
             String Destinataire = "lorislfvlefevre@gmail.com";
             String Sujet = "Test Mail Java";
@@ -49,15 +50,12 @@ public class EnvoiMailPieceAttacheeGmail
             message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(Destinataire));
             message.setSubject(Sujet);
 
-            // Create a multipart object
             Multipart multipart = new MimeMultipart();
 
-            // Add email body as the first part
             MimeBodyPart bodyPart = new MimeBodyPart();
             bodyPart.setText(MessageText);
             multipart.addBodyPart(bodyPart);
 
-            // Add the attachment as the second part
             MimeBodyPart attachmentPart = new MimeBodyPart();
             String filePath = "C:\\Users\\Loris_76t6f75\\Downloads\\Test.txt";
             FileDataSource source = new FileDataSource(filePath);
@@ -72,10 +70,9 @@ public class EnvoiMailPieceAttacheeGmail
             attachmentPart2.setFileName(source2.getName());
             multipart.addBodyPart(attachmentPart2);
 
-            // Set the content of the email to be the multipart
+
             message.setContent(multipart);
 
-            // Send the email
             System.out.println("Envoi du mail...");
             Transport.send(message);
             System.out.println("Envoi réussi !");

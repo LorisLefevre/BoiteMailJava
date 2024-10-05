@@ -132,19 +132,10 @@ public class LoginWindow extends JFrame implements VueLoginWindow
             this.mailboxwindow = MailBoxWindow.getMailBoxWindow();
             mailboxwindow.setUser(Username);
             mailboxwindow.getUser().setEditable(false);
+            //mailboxwindow.RecupererBoiteMail();
             mailboxwindow.setVisible(true);
             mailboxwindow.setContrôleurMailBoxWindow(contrôleur);
             return utilisateur;
-
-            /*if(this.mailwindow == null)
-            {
-                this.mailwindow = new MailWindow();
-            }
-            this.mailwindow = mailwindow.getMailWindow();
-            mailwindow.setExpediteur(Username);
-            mailwindow.setVisible(true);
-            mailwindow.setContrôleurMailWindow(contrôleur);
-            return utilisateur;*/
         }
 
         else

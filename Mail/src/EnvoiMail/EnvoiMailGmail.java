@@ -34,14 +34,12 @@ public class EnvoiMailGmail
         try {
             String Expediteur = "lorislfvlefevre@gmail.com";
             String Destinataire = "lorislfvlefevre@gmail.com";
-            String Destinataire2 = "lorislefevre02@gmail.com";
             String Sujet = "Test Mail Java";
             String Message = "Bonjour, ceci est un test d'envoi de mail avec Java.";
 
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(Expediteur));
             message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(Destinataire));
-            message.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(Destinataire2));
             message.setSubject(Sujet);
             message.setText(Message);
 

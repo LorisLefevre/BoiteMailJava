@@ -1,62 +1,57 @@
 package ReceptionMail;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 import javax.mail.*;
-import javax.mail.internet.MimeMultipart;
-import javax.sql.DataSource;
-
-public class ReceptionMailPieceAttachee
+import java.util.Properties;
+public class ReceptionMailGmailPieceAttachee
 {
-    static String Hote = "u4.tech.hepl.local";
     static String charset = "iso8859-1";
+    static String Hote = "pop.gmail.com";  // Serveur POP3 de Gmail
 
-    public ReceptionMailPieceAttachee()
+    public ReceptionMailGmailPieceAttachee()
     {
 
     }
 
     public static void main(String[] args)
     {
-        Properties props = System.getProperties();
-        props.put("mail.pop3.host", Hote);
-        props.put("mail.disable.top", "true");
-        props.put("file.encoding", charset);
+        Properties props = new Properties();
         System.out.println("Création d'une session mail");
-        Session session = Session.getDefaultInstance(props, null);
+
+
+        props.put("mail.pop3.host", Hote);
+        props.put("mail.pop3.port", "995");
+        props.put("mail.pop3.ssl.enable", "true");
+        props.put("mail.pop3.ssl.trust", "pop.gmail.com");
+        props.put("file.encoding", charset);
+
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator()
+        {
+            protected PasswordAuthentication getPasswordAuthentication()
+            {
+                return new PasswordAuthentication("lorislfvlefevre@gmail.com", "puqv gfzz qdhb yomp");
+            }
+        });
+
         try
         {
-            String user = "lefevrelo";
-            String password = "azerty1234";
-            Store store = session.getStore("pop3");
-            store.connect(Hote, user, password);
+            Store store = session.getStore("pop3s");
+            store.connect(Hote, "lorislfvlefevre@gmail.com", "puqv gfzz qdhb yomp");
+
             Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_ONLY);
 
-            Message messages []= folder.getMessages();
+            Message[] messages = folder.getMessages();
             System.out.println("Nombre de messages : " + folder.getMessageCount());
             System.out.println("Nombre de nouveaux messages : " + folder.getNewMessageCount());
 
-            System.out.println("Liste des messages");
-            for(int i = 1; i < messages.length; i++)
+            for (int i = 0; i < messages.length; i++)
             {
-                String[] rt = messages[i].getHeader("Return-Path");
-                rt = messages[i].getHeader("From");
-                rt = messages[i].getHeader("Subject");
-                System.out.println("Bonjour" + rt[0] + "Bonjour");
-                int pos = rt[0].indexOf("TextMail");
-                System.out.println("Bonjour" + pos + "Bonjour");
 
                 if(messages[i].isMimeType("multipart/*"))
                 {
                     System.out.println("------------------MULTI PART----------------------------");
                 }
-                
+
                 else
                 {
                     System.out.println("------------------SIMPLE PART----------------------------");
@@ -69,10 +64,9 @@ public class ReceptionMailPieceAttachee
                 }
             }
 
-
-
+            folder.close(false);
+            store.close();
         }
-
         catch (Exception e)
         {
             System.out.println("Erreur lors de la réception du mail : " + e);

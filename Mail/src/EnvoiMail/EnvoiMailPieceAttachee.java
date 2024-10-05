@@ -46,26 +46,23 @@ public class EnvoiMailPieceAttachee
             System.out.println("1ère composante du multipart...");
             MimeBodyPart mimebodypart = new MimeBodyPart();
             mimebodypart.setText(Message);
+            multipart.addBodyPart(mimebodypart);
 
             System.out.println("2ème composante du multipart...");
-            String Piece = "";//Mettre un doc ici
+            String Piece = "C:\\Users\\Loris\\AB.txt";
             mimebodypart = new MimeBodyPart();
             FileDataSource source = new FileDataSource(Piece);
             mimebodypart.setDataHandler(new DataHandler(new FileDataSource(Piece)));
             mimebodypart.setFileName(Piece);
-
-            System.out.println("3ème composante du multipart...");
-            Piece = "";//Mettre un doc ici
-            mimebodypart = new MimeBodyPart();
-            source = new FileDataSource(Piece);
-            mimebodypart.setDataHandler(new DataHandler(new FileDataSource(Piece)));
-            mimebodypart.setFileName(Piece);
+            multipart.addBodyPart(mimebodypart);
 
             message.setContent(multipart);
 
             System.out.println("Envoi du mail...");
 
             javax.mail.Transport.send(message);
+
+            System.out.println("Envoi réussi");
 
         }
 

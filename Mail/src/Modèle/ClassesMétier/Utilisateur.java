@@ -4,11 +4,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Properties;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
-import javax.mail.*;
 public class Utilisateur extends Personne
 {
     private static String Username;
@@ -34,28 +30,6 @@ public class Utilisateur extends Personne
         this.Username = Username;
         this.Password = Password;
     }
-
-
-    public boolean verifieDomaine(String domaine)
-    {
-        return Username != null && Username.toLowerCase().contains(domaine.toLowerCase());
-    }
-
-    public  static void DomaineMail(String Hote)
-    {
-        Mail mail = new Mail(Username, Password);
-        mail.ConfiguerSessionMail(Hote);
-        Session session = mail.getSession();
-        System.out.println("Session mail prête à l'emploi pour l'utilisateur : " + Username);
-    }
-
-    public static void DomaineGmail()
-    {
-        MailGmail mailGmail = new MailGmail(Username, Password);
-        mailGmail.configurerSessionGmail();
-        Session session = mailGmail.getSession();
-        System.out.println("Session Gmail prête à l'emploi pour l'utilisateur : " + Username);
-    }
     public  static Utilisateur seConnecter(String username, String password)
     {
         loadUserData();
@@ -68,32 +42,6 @@ public class Utilisateur extends Personne
             {
                 System.out.println("Connexion réussie pour " + username);
                 Utilisateur utilisateur = new Utilisateur(username, password);
-                if(utilisateur.verifieDomaine("u4.tech.hepl.local") || utilisateur.verifieDomaine("student.hepl.be") || utilisateur.verifieDomaine("outlook.be"))
-                {
-                   if(utilisateur.verifieDomaine("u4.tech.hepl.local"))
-                   {
-                       Hote = "u4.tech.hepl.local";
-                       DomaineMail(Hote);
-                   }
-
-                   else if (utilisateur.verifieDomaine("student.hepl.be"))
-                   {
-                       Hote = "student.hepl.be";
-                       DomaineMail(Hote);
-                   }
-
-                   else if (utilisateur.verifieDomaine("outlook.be"))
-                   {
-                       Hote = "outlook.be";
-                       DomaineMail(Hote);
-                   }
-
-                }
-
-                else if(utilisateur.verifieDomaine("gmail.com"))
-                {
-                    DomaineGmail();
-                }
 
                 return utilisateur;
             }
@@ -107,9 +55,8 @@ public class Utilisateur extends Personne
         }
         else
         {
-            // Créer un nouveau administrateur
             users.put(username, password);
-            saveUserData(); // Sauvegarder les données des administrateurs dans le fichier
+            saveUserData();
             System.out.println("Nouvel utilisateur créé : " + username);
             return new Utilisateur(username, password);
         }
@@ -150,7 +97,7 @@ public class Utilisateur extends Personne
         }
     }
 
-    // Getters and setters
+
     public String getUsername()
     {
         return Username;
@@ -166,7 +113,7 @@ public class Utilisateur extends Personne
         return Password;
     }
 
-    public void setAdminPassword(String Password)
+    public void setPassword(String Password)
     {
         this.Password = Password;
     }
@@ -194,7 +141,7 @@ public class Utilisateur extends Personne
         this.Password = scanner.nextLine();
     }
 
-    // Surcharge de la méthode toString
+
     @Override
     public String toString()
     {

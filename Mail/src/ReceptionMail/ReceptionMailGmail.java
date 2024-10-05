@@ -44,13 +44,18 @@ public class ReceptionMailGmail
             System.out.println("Nombre de messages : " + folder.getMessageCount());
             System.out.println("Nombre de nouveaux messages : " + folder.getNewMessageCount());
 
-            for (Message message : messages)
+            for (int i = 0; i < messages.length; i++)
             {
-                System.out.println("Message n° " + message.getMessageNumber());
-                System.out.println("Expéditeur : " + message.getFrom()[0].toString());
-                System.out.println("Sujet : " + message.getSubject());
-                System.out.println("Date : " + message.getSentDate());
-                System.out.println("-----------------------------------");
+                if(messages[i].isMimeType("text/plain"))
+                {
+                    System.out.println("Message n° " + messages[i].getMessageNumber());
+                    System.out.println("Expediteur : " +messages[i].getFrom()[0]);
+                    System.out.println("Sujet : " + messages[i].getSubject());
+                    System.out.println("Date : " + messages[i].getSentDate());
+                    System.out.println("Texte : "+ (String)messages[i].getContent());
+                    System.out.println("-----------------------------------");
+                }
+
             }
 
             // Fermeture de la boîte de réception et du store

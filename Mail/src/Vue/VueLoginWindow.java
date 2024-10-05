@@ -2,7 +2,6 @@ package Vue;
 
 import Modèle.ClassesMétier.Utilisateur;
 import Contrôleur.*;
-import Vue.InterfacesGraphiques.LoginWindow;
 
 public interface VueLoginWindow
 {

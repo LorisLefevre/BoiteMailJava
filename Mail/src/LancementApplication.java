@@ -1,7 +1,7 @@
 import Modèle.CoucheAccèsDonnées.*;
 import Contrôleur.*;
 import Vue.InterfacesGraphiques.*;
-import Vue.*;
+
 public class LancementApplication
 {
     public static void main(String[] args)

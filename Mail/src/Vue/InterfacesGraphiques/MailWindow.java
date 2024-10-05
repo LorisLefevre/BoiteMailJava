@@ -376,7 +376,6 @@ public class MailWindow extends JFrame implements VueMailWindow
             File selectedFile = fileChooser.getSelectedFile();
             String filePath = selectedFile.getAbsolutePath();
 
-
             tableModel.addRow(new Object[]{filePath});
         }
     }

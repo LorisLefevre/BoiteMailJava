@@ -85,6 +85,7 @@ public class Contrôleur implements ActionListener
         if (e.getActionCommand().equals(ActionsContrôleur.RAFFRAICHIR))
         {
             System.out.println("Raffraichir la boite mail");
+            mailboxwindow.Raffraichir();
         }
 
         if (e.getActionCommand().equals(ActionsContrôleur.LIRE))
